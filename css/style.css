@@ -1,0 +1,96 @@
+.calculator-wrapper {
+    height: 20rem;
+    width: 20rem;
+    padding: 0.5rem;
+    display: grid;
+    grid-gap: 0.2rem;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-areas:
+        "display display display display"
+        "clear plus-minus percentage add"
+        "number7 number8 number9 subtract"
+        "number4 number5 number6 multiply"
+        "number1 number2 number3 divide"
+        "number0 number0 decimal result";
+}
+
+.display {
+    grid-area: display;
+}
+
+.result {
+    grid-area: result;
+}
+
+.clear {
+    grid-area: clear;
+}
+
+.number1 {
+    grid-area: number1;
+}
+
+.number2 {
+    grid-area: number2;
+}
+
+.number3 {
+    grid-area: number3;
+}
+
+.number4 {
+    grid-area: number4;
+}
+
+.number5 {
+    grid-area: number5;
+}
+
+.number6 {
+    grid-area: number6;
+}
+
+.number7 {
+    grid-area: number7;
+}
+
+.number8 {
+    grid-area: number8;
+}
+
+.number9 {
+    grid-area: number9;
+}
+
+.number0 {
+    grid-area: number0;
+}
+
+.decimal {
+    grid-area: decimal;
+}
+
+.percentage {
+    grid-area: percentage;
+}
+
+.add {
+    grid-area: add;
+}
+
+.subtract {
+    grid-area: subtract;
+}
+
+.multiply {
+    grid-area: multiply;
+}
+
+.divide {
+    grid-area: divide;
+}
+
+.plusminus {
+    grid-area: plus-minus;
+}

@@ -14,17 +14,21 @@ function divide (a, b) {
     return parseFloat(a) / parseFloat(b);
 }
 
-let storedValue = "";
-let storedValue2 = "";
-let usedOperator = "";
+let value1 = "";
+let value2 = "";
+let operator1 = "";
+let operator2 = "";
 let result = "";
+let operatorActivated = false;
+let clearCheck = false;
 
 const numberButtons = document.querySelectorAll(".number button");
 const operatorButtons = document.querySelectorAll(".operator button");
 const resultButton = document.querySelector(".btn-result");
 const clearButton = document.querySelector(".btn-clear");
 const display = document.querySelector(".display");
-const plusMinusButton = document.querySelector(".plusminus")
+const plusMinusButton = document.querySelector(".plusminus");
+const decimal = document.querySelector(".decimal");
 
 numberButtons.forEach(button => {
     button.addEventListener("click", getNumber);
@@ -35,17 +39,46 @@ operatorButtons.forEach(button => {
 })
 
 resultButton.addEventListener("click", getResult);
-clearButton.addEventListener("click", clear);
+clearButton.addEventListener("click", clearVars);
+clearButton.addEventListener("click", resetDisplay);
 plusMinusButton.addEventListener("click", plusminus);
+decimal.addEventListener("click", insertDecimal);
 
 function getNumber(e) {
-    storedValue += this.value;
-    display.textContent = storedValue;
+    if (display.textContent === "0") {
+        clearDisplay();
+    }
+    if (clearCheck === true) {
+        clearDisplay();
+        clearCheck = false;
+    }
+        display.textContent += e.target.value;
+        operatorActivated = false;
 }
 
-function getNumber2(e) {
-    storedValue2 += this.value;
-    display.textContent = storedValue2;
+function useOperator(e) {
+    if (operatorActivated === true) {
+        operator1 = this.value;
+        operator2 = this.value;
+        return;
+    }
+
+    if (value1 === "") {
+        value1 = display.textContent;
+        operator1 = this.value;
+    } else if (value1 !== "" && result === "") {
+        value2 = display.textContent;
+        evaluate();
+        value1 = result;
+        operator2 = this.value;
+    } else {
+        value2 = display.textContent;
+        operator1 = operator2;
+        evaluate();
+        operator2 = this.value;
+        value1 = result;
+    } clearCheck = true;
+    operatorActivated = true;
 }
 
 function operate(operator, a, b) {
@@ -62,69 +95,53 @@ function operate(operator, a, b) {
 }
 
 function evaluate() {
-    result = operate(usedOperator, storedValue, storedValue2);
-    if (usedOperator === "divide" && storedValue2 === "0") {
+    result = operate(operator1, value1, value2);
+    result = Math.round(result * 10000) / 10000;
+    if (operator1 === "divide" && value2 === "0") {
         display.textContent = "You absolute buffoon...";
         setTimeout(clear, 1000);
     } else {
     display.textContent = result;
-    storedValue = result;
-    storedValue2 = "";
-    usedOperator = "";
-    }
-}
-
-function useOperator(e) {
-    usedOperator = this.value;
-
-    if (storedValue2 === "") {
-        numberButtons.forEach(button => {
-            button.removeEventListener("click", getNumber);
-            button.addEventListener("click", getNumber2);
-        })
-    } else {
-        evaluate();
+    clearCheck = true;
     }
 }
 
 function getResult() {
-    if (storedValue === "" || storedValue2 === "") {
+    if (value1 === ""|| operatorActivated === true) {
         return
     } else {
+    value2 = display.textContent;
     evaluate();
+    clearVars();
     }
 }
 
-
-function clear() {
-    numberButtons.forEach(button => {
-        button.removeEventListener("click", getNumber2);
-        button.addEventListener("click", getNumber);
-    })
-    storedValue = "";
-    storedValue2 = "";
+function clearVars() {
+    value1 = "";
+    value2 = "";
     result = "";
-    usedOperator = "";
+    operator1 = "";
+    operator2 = "";
+}
+
+function clearDisplay() {
+    display.textContent = "";
+}
+
+function resetDisplay() {
     display.textContent = "0";
 }
 
 function plusminus() {
-    switch (display.textContent) {
-        case storedValue:
-            storedValue = 0 - storedValue;
-            display.textContent = storedValue;
-            break;
-        case storedValue2:
-            storedValue2 = 0 - storedValue2;
-            display.textContent = storedValue;
-            break;
-        case result:
-            result = 0 - result;
-            display.textContent = storedValue;
-            break;
-    }
+    display.textContent = 0 - display.textContent;
 }
 
-function inputNumber() {
-    
+function insertDecimal() {
+    if (display.textContent === "") {
+        return
+    } else if (display.textContent.includes("\.")) {
+        return
+    }
+    display.textContent += "\.";
 }
+
